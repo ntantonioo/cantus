@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cantus · Criar perfil de coordenação</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Montserrat:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="wrap" style="padding-top:28px">
+  <h1>Criar perfil de coordenação</h1>
+  <p class="lead">Gere a linha do perfil e cole dentro da lista <b>COORDS</b> no início do <b>script.js</b>. Este arquivo não precisa ser publicado.</p>
+  <label for="n">Nome do perfil</label><input id="n" autocomplete="off">
+  <label for="p">PIN (use 6 dígitos ou mais)</label><input id="p" type="password" autocomplete="off">
+  <div class="actions"><button id="go" type="button">Gerar linha</button></div>
+  <div id="out" class="box" style="display:none"></div>
+</main>
+<script>
+const SALT = "cantus-v1|";
+async function sha(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+document.getElementById("go").onclick=async()=>{
+  const n=document.getElementById("n").value.trim(),p=document.getElementById("p").value.trim(),o=document.getElementById("out");
+  if(!n||!p){alert("Preencha nome e PIN");return}
+  const h=await sha(SALT+n.toLowerCase()+":"+p);
+  o.style.display="block";o.textContent='{ name: "'+n.replace(/"/g,"")+'", hash: "'+h+'" },';
+};
+</script>
+</body>
+</html> 

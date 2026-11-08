@@ -168,3 +168,10 @@ pre > .sec:first-child { margin-top: 0; }
   transform: translateX(-50%); background: var(--ink); color: var(--on-ink);
   padding: 8px 16px; border-radius: var(--radius); display: none; font-size: .9rem;
 }
+
+/* ---------- verificação ---------- */
+dialog { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--text); padding: 22px; width: min(360px, 92vw); }
+dialog::backdrop { background: rgba(15, 34, 54, .55); }
+dialog h2 { margin: 0 0 14px; font-size: 1.25rem; }
+.msg { color: var(--danger); min-height: 1.4em; margin: 0 0 4px; font-size: .9rem; }
+.box { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; font-family: var(--mono); font-size: .85rem; word-break: break-all; }    

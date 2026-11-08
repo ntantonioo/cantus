@@ -17,6 +17,18 @@ const DEFAULT_DATA = {
   ]
 };
 
+/* =====================================================
+   PERFIS DE COORDENAÇÃO
+   Cada perfil tem nome + PIN. O PIN nunca fica escrito aqui,
+   só o "hash" (impressão digital). Para criar perfis, abra
+   perfil.html, gere a linha e cole dentro da lista abaixo.
+   O perfil de teste é: Coordenador / PIN 1234  (TROQUE!)
+   ===================================================== */
+const COORDS = [
+  { name: "Coordenador", hash: "b48dcd2fd5f6d20fb98ac6e62730c114f8f84119cec2ab0c356f187a03fda449" }
+];
+const SALT = "cantus-v1|";
+
 /* ===================== código ===================== */
 const STORE = "cantus-v1";
 const $ = id => document.getElementById(id);
@@ -25,7 +37,8 @@ const FL = ["C","Db","D","Eb","E","F","Gb","G","Ab","A","Bb","B"];
 const CH = /^[A-G][#b]?(?:m|maj|min|dim|aug|sus|add|M)?[0-9]*(?:\([^)]*\))?(?:\/[A-G][#b]?)?$/;
 
 let D = load();
-let canEdit = false, ctx = null, cur = null;
+let canEdit = false, who = null, ctx = null, cur = null;
+let fails = 0, lockUntil = 0;
 let semi = 0, showC = true, fs = 16, timer = null, speed = 1;
 
 function load() {
@@ -84,7 +97,7 @@ function renderText() {
 function setNav(tab) {
   document.querySelectorAll("#nav a").forEach(a => a.classList.toggle("on", a.dataset.t === tab));
   $("ed").classList.toggle("on", canEdit);
-  $("ed").textContent = canEdit ? "Sair da coordenação" : "Coordenação";
+  $("ed").textContent = canEdit ? "Sair (" + who + ")" : "Coordenação";
 }
 const logo = '<img data-logo="full" alt="Cantus · Cifras &amp; Músicas" width="220" height="227">';
 
@@ -223,7 +236,10 @@ function act(a, i) {
   else if (a === "as") { timer ? stop() : play(); }
   else if (a === "sm" || a === "sp") { speed = Math.min(4, Math.max(.3, speed + (a === "sp" ? .3 : -.3))); if (timer) { stop(); play(); } }
   else if (a === "th") { document.documentElement.setAttribute("data-theme", isDark() ? "light" : "dark"); applyLogos(); }
-  else if (a === "toggleEdit") { canEdit = !canEdit; route(); }
+  else if (a === "toggleEdit") {
+    if (canEdit) { canEdit = false; who = null; try { sessionStorage.removeItem("cantus-auth"); } catch (e) {} route(); }
+    else openLogin();
+  }
   else if (!canEdit) return;
   else if (a === "new") location.hash = "edit-new";
   else if (a === "edit") location.hash = "edit-" + cur.id;
@@ -261,6 +277,35 @@ function act(a, i) {
     D = JSON.parse(JSON.stringify(DEFAULT_DATA)); route();
   }
 }
+
+/* --- verificação de identidade --- */
+async function sha(t) {
+  const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t));
+  return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join("");
+}
+function openLogin() {
+  $("lp").innerHTML = COORDS.map(c => "<option>" + esc(c.name) + "</option>").join("");
+  $("lk").value = ""; $("lm").textContent = "";
+  $("login").showModal(); $("lk").focus();
+}
+$("lcancel").onclick = () => $("login").close();
+$("lf").onsubmit = async e => {
+  e.preventDefault();
+  const now = Date.now();
+  if (now < lockUntil) { $("lm").textContent = "Muitas tentativas. Aguarde " + Math.ceil((lockUntil - now) / 1000) + " s."; return; }
+  if (!window.crypto || !crypto.subtle) { $("lm").textContent = "Abra o site por https para usar a verificação."; return; }
+  const name = $("lp").value, c = COORDS.find(x => x.name === name);
+  const h = await sha(SALT + name.trim().toLowerCase() + ":" + $("lk").value.trim());
+  if (c && h === c.hash) {
+    canEdit = true; who = c.name; fails = 0;
+    try { sessionStorage.setItem("cantus-auth", h); } catch (x) {}
+    $("login").close(); route(); toast("Olá, " + c.name);
+  } else {
+    if (++fails >= 5) { lockUntil = Date.now() + 30000; fails = 0; }
+    $("lm").textContent = "Perfil ou senha incorretos."; $("lk").value = ""; $("lk").focus();
+  }
+};
+try { const t = sessionStorage.getItem("cantus-auth"), c = COORDS.find(x => x.hash === t); if (c) { canEdit = true; who = c.name; } } catch (e) {}
 
 document.addEventListener("click", e => { const b = e.target.closest("[data-a]"); if (b) act(b.dataset.a, b.dataset.i); });
 window.addEventListener("hashchange", route);

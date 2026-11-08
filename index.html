@@ -36,6 +36,17 @@
 <footer class="foot">Cantus · Cifras &amp; Músicas</footer>
 <div id="toast" role="status"></div>
 <input type="file" id="file" accept=".json,application/json" hidden>
+<dialog id="login" aria-labelledby="lt">
+  <form id="lf">
+    <h2 id="lt">Entrar na coordenação</h2>
+    <label for="lp">Perfil</label>
+    <select id="lp"></select>
+    <label for="lk">PIN</label>
+    <input id="lk" type="password" inputmode="numeric" autocomplete="off">
+    <p id="lm" class="msg" role="alert"></p>
+    <div class="actions"><button type="submit">Entrar</button><button type="button" class="o" id="lcancel">Cancelar</button></div>
+  </form>
+</dialog>
 <script src="assets.js"></script>
 <script src="script.js"></script>
 </body>
