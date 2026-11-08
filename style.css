@@ -1,0 +1,170 @@
+/* ===== Paleta da logo Cantus: azul-marinho + creme, misturados em tons ===== */
+:root {
+  --navy: #18324F;
+  --cream: #F8F5E9;
+
+  /* claro */
+  --bg: #F8F5E9;
+  --bg2: #EDE8D3;                       /* creme mais fundo (fim do degradê) */
+  --surface: #FFFDF7;
+  --ink: #18324F;
+  --text: #2A3F57;
+  --muted: #62758B;
+  --blue: #2F5E96;                      /* azul médio: pontes entre marinho e creme */
+  --wash: rgba(24, 50, 79, .06);        /* marinho diluído sobre o creme */
+  --wash2: rgba(24, 50, 79, .12);
+  --line: rgba(24, 50, 79, .16);
+  --glow: rgba(47, 94, 150, .16);
+  --on-ink: #F8F5E9;
+  --top-bg: rgba(255, 253, 247, .88);
+  --danger: #A8402F;
+
+  --radius: 8px;
+  --sans: Montserrat, "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: light;
+  box-sizing: border-box;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F2236; --bg2: #0A1828; --surface: #17304B;
+    --ink: #F8F5E9; --text: #DCE4EE; --muted: #9AACC0; --blue: #9CC0EA;
+    --wash: rgba(248, 245, 233, .07); --wash2: rgba(248, 245, 233, .13);
+    --line: rgba(248, 245, 233, .17); --glow: rgba(156, 192, 234, .15);
+    --on-ink: #18324F; --top-bg: rgba(15, 34, 54, .9); --danger: #F0907F;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F2236; --bg2: #0A1828; --surface: #17304B;
+  --ink: #F8F5E9; --text: #DCE4EE; --muted: #9AACC0; --blue: #9CC0EA;
+  --wash: rgba(248, 245, 233, .07); --wash2: rgba(248, 245, 233, .13);
+  --line: rgba(248, 245, 233, .17); --glow: rgba(156, 192, 234, .15);
+  --on-ink: #18324F; --top-bg: rgba(15, 34, 54, .9); --danger: #F0907F;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-padding-top: 70px; }
+body {
+  margin: 0; color: var(--text);
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%) fixed;
+  font-family: var(--sans); font-size: 16px; line-height: 1.55;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+
+/* ---------- topo ---------- */
+.top {
+  background: var(--top-bg);
+  border-bottom: 1px solid var(--line);
+  padding-top: env(safe-area-inset-top, 0px);
+}
+.top-in { max-width: 820px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font-weight: 500; letter-spacing: .2em; text-transform: uppercase; font-size: 1.05rem; }
+.brand img { display: block; height: 37px; width: auto; }
+.top nav { display: flex; gap: 2px; }
+.top nav a { text-decoration: none; padding: 6px 12px; border-radius: var(--radius); font-size: .92rem; color: var(--muted); }
+.top nav a:hover { background: var(--wash); }
+.top nav a.on { color: var(--ink); background: var(--wash2); font-weight: 500; }
+.tools { margin-left: auto; display: flex; gap: 6px; }
+.tools button { padding: 6px 12px; font-size: .85rem; }
+.tools button.on { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
+
+.wrap { max-width: 820px; margin: 0 auto; padding: 8px 16px 60px; min-height: 70vh; }
+.foot { text-align: center; color: var(--muted); font-size: .85rem; padding: 0 16px 30px; }
+
+/* ---------- apresentação ---------- */
+.hero {
+  text-align: center; padding: 26px 0 24px; margin: 0 -16px 18px;
+  background: radial-gradient(60% 90% at 50% 0%, var(--glow), transparent 70%);
+}
+.hero img { width: min(220px, 56vw); height: auto; display: inline-block; }
+.hero p { margin: 8px auto 0; color: var(--muted); max-width: 34ch; }
+h1, h2 { color: var(--ink); font-weight: 600; letter-spacing: -.01em; margin: 0; }
+h1 { font-size: 1.7rem; margin-top: 22px; }
+h2 { font-size: 1.6rem; margin-top: 18px; }
+.lead { color: var(--muted); margin: 4px 0 18px; }
+
+/* ---------- campos ---------- */
+input, select, textarea {
+  width: 100%; padding: 11px 13px; margin-bottom: 10px;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); color: var(--text); font: inherit;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--blue); }
+textarea { font-family: var(--mono); font-size: 14.5px; line-height: 1.55; }
+label { display: block; font-size: .85rem; color: var(--muted); margin: 2px 0 4px; }
+
+/* ---------- botões ---------- */
+button, .btn {
+  border: 1px solid var(--ink); background: var(--ink); color: var(--on-ink);
+  padding: 9px 15px; border-radius: var(--radius);
+  font: inherit; font-size: .92rem; font-weight: 500; cursor: pointer;
+  text-decoration: none; display: inline-block;
+}
+button:hover, .btn:hover { opacity: .9; }
+button.o, .btn.o { background: var(--wash); color: var(--ink); border-color: var(--line); }
+button.o:hover, .btn.o:hover { background: var(--wash2); opacity: 1; }
+button.d { background: transparent; color: var(--danger); border-color: var(--danger); }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 16px; }
+
+/* ---------- listas ---------- */
+.index { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.entry {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  padding: 14px 16px; border-bottom: 1px solid var(--line);
+  text-decoration: none; color: inherit;
+}
+.index > :last-child { border-bottom: 0; }
+.index > .row:last-child .entry { border-bottom: 0; }
+.entry:hover { background: var(--wash); }
+.entry b { display: block; color: var(--ink); font-weight: 600; }
+.entry small { color: var(--muted); }
+.key {
+  font-family: var(--mono); font-weight: 600; color: var(--blue);
+  background: var(--wash); border-radius: 99px; padding: 1px 11px; min-width: 2.6em; text-align: center;
+}
+.num { font-family: var(--mono); color: var(--muted); width: 1.8em; flex: none; }
+.entry .l { display: flex; gap: 8px; align-items: baseline; }
+.row { display: flex; align-items: stretch; border-bottom: 1px solid var(--line); }
+.row .entry { flex: 1; border-bottom: 0; }
+.row button { padding: 0 14px; margin: 0; border-radius: 0; border: 0; border-left: 1px solid var(--line); background: transparent; color: var(--ink); }
+.row button:hover { background: var(--wash2); }
+.empty { color: var(--muted); text-align: center; padding: 34px 16px; }
+
+/* ---------- página da música ---------- */
+.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--top-bg); backdrop-filter: blur(10px);
+  padding: 10px 0; border-bottom: 1px solid var(--line); margin: 0 -16px; padding-left: 16px; padding-right: 16px;
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+.bar button, .bar a { padding: 6px 11px; font-size: .85rem; }
+.bar span { color: var(--muted); font-family: var(--mono); font-size: .85rem; padding: 0 4px; }
+.bar .sp { flex: 1; }
+.nav { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 14px 0 0; font-size: .9rem; color: var(--muted); }
+.nav a { color: var(--blue); font-weight: 500; text-decoration: none; }
+.meta { color: var(--muted); margin: 2px 0 14px; }
+
+#body { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 18px 22px; }
+pre {
+  font-family: var(--mono); font-size: var(--fs, 16px); line-height: 1.6;
+  white-space: pre-wrap; word-break: break-word; margin: 0; color: var(--text);
+}
+.c { color: var(--blue); font-weight: 600; }
+.sec {
+  display: inline-block; margin: 18px 0 4px; padding: 1px 12px;
+  background: var(--wash2); color: var(--ink); border-radius: 99px;
+  font-family: var(--sans); font-size: .82em; font-weight: 600;
+}
+pre > .sec:first-child { margin-top: 0; }
+.proj pre { font-family: var(--sans); text-align: center; line-height: 1.75; }
+.proj .c { display: none; }
+
+#toast {
+  position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%); background: var(--ink); color: var(--on-ink);
+  padding: 8px 16px; border-radius: var(--radius); display: none; font-size: .9rem;
+}
